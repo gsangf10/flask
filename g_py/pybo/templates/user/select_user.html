@@ -1,0 +1,19 @@
+<div>
+    {% if flag %}
+        <div>회원가입 완료</div>
+    {% endif %}
+    {% if user_list %}
+        <ul>
+        {% for user in user_list %}
+            <div>{{user['login_id']}}</div>
+            <div>{{user['user_name']}}</div>
+            <div>{{user['sex']}}</div>
+            <div>{{user['age']}}</div>
+            <div>{{user['reg_date']}}</div>
+            <div>{{user['mod_date']}}</div>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>유저가 없습니다.</p>
+    {% endif %}
+</div>
