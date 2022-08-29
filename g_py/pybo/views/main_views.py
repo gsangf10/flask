@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-import pybo.models.sql_manager as sm
+import pybo.models.user_sql as sm
 
 bp = Blueprint('main', __name__, url_prefix='/')
 
@@ -12,9 +12,3 @@ def show_form():
 @bp.route('/')
 def index():
     return render_template("main.html")
-
-
-@bp.route('/get_article')
-def get_article():
-    a_list = sm.select_sql()
-    return a_list

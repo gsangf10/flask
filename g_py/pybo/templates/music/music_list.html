@@ -1,0 +1,9 @@
+<div></div>
+
+{%for music in music_list%}
+    <div>
+        {{music['TITLE']}} {{music['ARTIST']}} {{music['GENRE']}} {{music['PLAY_TIME']}}
+        <a href="#">재생</a>
+    </div>
+    <br>
+{%endfor%}

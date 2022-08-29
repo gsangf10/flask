@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, url_for, request
+from flask import Blueprint, render_template, url_for, request, session
 from werkzeug.utils import redirect
-import pybo.models.sql_manager as sm
+import pybo.models.user_sql as db
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -25,15 +25,41 @@ def insert_user():
     user_dic['sex'] = sex
     user_dic['age'] = age
     
-    sm.insert_user(user_dic)
-    
-    flag = request.args.get('flag')
-    
-    return redirect(url_for('user.select_user', user_dic=user_dic, flag=flag))
+    db.insert_user(user_dic)
+        
+    return redirect(url_for('user.select_user', user_dic=user_dic))
 
-
+        
 @bp.route('/select_user')
 def select_user():
-    user_list = sm.select_user()
-    print(user_list)
-    return render_template('user/select_user.html', user_list=user_list)
+    user_list = db.select_user()
+    return render_template('user/user_list.html', user_list=user_list)
+
+
+@bp.route('/login_form')
+def login_form():
+    return render_template('/login_form.html')
+
+
+@bp.route('/login_check')
+def login_check():
+    login_id = request.args.get("login_id")
+    login_pw = request.args.get("login_pw")
+    
+    target = db.get_user(login_id)
+    
+    if target == None:
+        return "없는 회원입니다."
+
+    if target['LOGIN_PW'] != login_pw:
+        return "비밀번호가 다릅니다"
+    
+    session['login_user'] = target
+    
+    return redirect(url_for('main.index'))
+
+
+@bp.route('/logout')
+def logout():
+    session.pop("login_user", None)
+    return redirect(url_for('main.index'))
